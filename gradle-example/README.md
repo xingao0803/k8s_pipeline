@@ -20,12 +20,6 @@
 3.  Create new Jenkins Pipeline Job.
 
 4.  Add String Parameters:
-    *   GRADLE_TOOL (String Parameter) : Provide name of configured Gradle installation 
-		e.g `GRADLE_TOOL : gradle-3.5.1`
-    *   DEPLOY_REPO (String Parameter) -> Artifactory Gradle Repository name<Br>
-		e.g.  `DEPLOY_REPO -> gradle-release`
-    *   SERVER_ID (String Parameter) : Artifactory Server Id<Br>
-	    e.g. `SERVER_ID -> artifactory`
     *   XRAY_SCAN (Choice Parameter) : Xray Scan. Applicable only if you are using JFrog Xray<Br>
     	e.g. `XRAY_SCAN -> NO`
     *   CLEAN_REPO (Choice Parameter) : Clean gradle cache before building project<Br>
