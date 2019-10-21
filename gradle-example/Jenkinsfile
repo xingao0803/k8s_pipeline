@@ -1,30 +1,48 @@
-node {
-    def server = Artifactory.server SERVER_ID
-    def rtGradle = Artifactory.newGradleBuild()
+def user_apikey
 
-    //Clone example code from GitHub repository
-    stage 'Build'
-        git url: 'https://github.com/jfrogtraining/kubernetes_example.git', branch: 'master'
+withCredentials([string(credentialsId: <credential-for-arti-apikey>, variable: 'secret_text')]) {
+    user_apikey = "${secret_text}"
+}
+
+node {
+
+	def server
+	def buildInfo
+	def rtGradle
+	def warVersion
+
+	stage('Prepare') {
+		server = Artifactory.server(<Arifactory-Server-Name>) //System name from Jenkins configuration
+		buildInfo = Artifactory.newBuildInfo()
+		buildInfo.env.capture = true
+		rtGradle = Artifactory.newGradleBuild()
+	}
 
     //Configure Artifactroy repository to pull/push artifacts
     stage 'Artifactory configuration'
-        rtGradle.tool = GRADLE_TOOL // Tool name from Jenkins configuration
-        rtGradle.deployer repo:DEPLOY_REPO, server: server
-        rtGradle.resolver repo:'libs-release', server: server
+        rtGradle.tool = <Gradle-Tool-Name> // Tool name from Jenkins configuration
+        rtGradle.deployer repo:'<gradle-local-repo-name>', server: server
+        rtGradle.resolver repo:'<gradle-virtual-repo-name>', server: server
         rtGradle.deployer.addProperty("unit-test", "pass").addProperty("qa-team", "platform", "ui")
-        def buildInfo = Artifactory.newBuildInfo()
-        buildInfo.env.capture = true
 
+    //Clone example code from GitHub repository
+    stage 'SCM'
+        git url: 'https://github.com/xingao0803/k8s_pipeline.git', branch: 'master'
+
+	stage('Update Version') {
+	    currentVersion = "1.1.${BUILD_NUMBER}"
+		sh "sed -i '' 's/-BUILD_NUMBER-/${currentVersion}/g' gradle-example/gradle.properties"
+	}
     //Run gradle build
     stage 'Exec Gradle'
         if(CLEAN_REPO == "YES") {
             sh 'rm -rf ~/.gradle/caches'
         }
         rtGradle.run rootDir: "gradle-example/", buildFile: 'build.gradle', tasks: 'clean artifactoryPublish', buildInfo: buildInfo
+        server.publishBuildInfo buildInfo        
 
     //Publish artifacts to Artifactory along with build information and scan build artifacts in Xray
     stage 'Publish Build Information & Scan Artifacts'
-        server.publishBuildInfo buildInfo
         if (XRAY_SCAN == "YES") {
             def scanConfig = [
                 'buildName'      : env.JOB_NAME,
@@ -34,4 +52,10 @@ node {
             def scanResult = server.xrayScan scanConfig
             echo scanResult as String
          }
+         
+	stage('Function Test'){
+    	commandText = "curl  -H \"X-JFrog-Art-Api: ${user_apikey}\" -X PUT \"http://<Artifactory-Server-URL>/artifactory/api/storage/<gradle-local-repo-name>/org/jfrog/example/gradle/webservice/"+currentVersion+"/webservice-"+currentVersion+".war?properties=Functest=pass\" ";
+	    sh commandText
+	    
+	} 
 }
