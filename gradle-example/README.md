@@ -1,6 +1,6 @@
 ## Create an application war file
 
-• Creates a sample application called ‘webservice-1.1.2.war’
+• Creates a sample application called ‘webservice-1.1.x.war’
 • Pushes it to a local repository in Artifactory
 
 ### Step to create Jenkins Pipeline:
