@@ -1,0 +1,6 @@
+apiKeyResp=`curl -s -u admin:Passw0rd http://127.0.0.1:9081/artifactory/api/security/apiKey`
+
+apiKey=`echo $apiKeyResp | awk -F '":"' '{print $2}' | awk -F '"}' '{print $1}' `
+
+set -x
+curl -H "X-JFrog-Art-Api: ${apiKey}" -X POST http://127.0.0.1:9081/artifactory/api/search/aql -T $1

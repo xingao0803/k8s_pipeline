@@ -1,0 +1,8 @@
+items.find({
+    "repo":"k8sPipeline-gradle-dev-local",
+    "name":{"$match":"webservice-*"},
+    "@unit-test":{"$eq":"pass"},
+    "@Functest":{"$eq":"pass"}
+}).sort({
+    "$desc": ["created"]
+}).limit(1)
