@@ -28,20 +28,12 @@
 5.  Add String Parameters:
     *   ARTDOCKER_REGISTRY (String Parameter) : Domain of Artifactory docker registry 
 		e.g `ARTDOCKER_REGISTRY : docker.artifactory`
-    *   REPO (String Parameter) -> Artifactory virtual docker registry<Br>
+    *   DEV_REPO (String Parameter) -> Artifactory local docker registry<Br>
 		e.g.  `REPO -> docker`
-    *   PROMOTE_REPO (String Parameter) : Artifactory production docker registry<Br>
+    *   LIB_REPO (String Parameter) : Artifactory virtual docker registry<Br>
 	    e.g. `PROMOTE_REPO -> docker-prod-local`
-    *   SOURCE_REPO (String Parameter) : Artifactory staging docker registry<Br>
-    	e.g. `SOURCE_REPO -> docker-stage-local`
-    *   SERVER_ID (String Parameter) : Artifactory Server Id<Br>
-    	e.g. `SERVER_ID -> artifactory`
     *   XRAY_SCAN (Choice Parameter) : Xray Scan. Applicable only if you are using JFrog Xray<Br>
         e.g. `XRAY_SCAN -> YES`
-    *   SERVER_URL (String Parameter) : Artifactory Server URL<Br>
-        e.g. `SERVER_URL -> http://35.225.27.231/artifactory`
-    *   CREDENTIALS (Credentials Parameter) : Artifactory Credential<Br>
-        e.g. `CREDENTIALS -> artifactory-credentials`
     
 6.  Copy [Jenkinsfile](Jenkinsfile) to Pipeline Script.
 
