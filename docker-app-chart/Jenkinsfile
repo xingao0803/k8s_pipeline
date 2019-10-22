@@ -60,6 +60,7 @@ node {
             /* Configure helm client to point to k8s cluster */
             sh "./helm init"
             sh "sed -i '' 's/0.1.1/0.1.${env.BUILD_NUMBER}/' Chart.yaml"
+            sh "sed -i '' 's&docker.artifactory&${ARTDOCKER_REGISTRY}/${RELEASE_REPO}&' docker-app-chart/values.yaml"
             sh "sed -i '' 's/latest/${IMAGE_TAG}/g' values.yaml"
             sh "./helm package ./"
             sh "./jfrog rt u '*.tgz' ${REPO} --server-id=arti-server --build-name=${env.JOB_NAME} --build-number=${env.BUILD_NUMBER}"
