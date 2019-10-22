@@ -11,13 +11,8 @@
 3.  Add String Parameters:
     *   IMAGE_TAG (String Parameter) : Domain of Artifactory docker registry 
 		e.g `IMAGE_TAG : latest`
-    *   SERVER_URL (String Parameter) : Artifactory Server URL<Br>
-        e.g. `SERVER_URL -> http://35.225.27.231/artifactory`
     *   REPO (String Parameter) : Artifactory Helm repo<Br>
         e.g. `REPO -> helm`
-    *   CREDENTIALS (Credentials Parameter) : Artifactory Credential<Br>
-        e.g. `CREDENTIALS -> artifactory-credentials`
-    
     	
 4.  Copy [Jenkinsfile](Jenkinsfile) to Pipeline Script.
 
